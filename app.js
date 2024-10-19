@@ -10,7 +10,7 @@ app.use(express.static('public'));
 // Set CORS headers
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE'); // Allow DELETE method
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
@@ -74,6 +74,16 @@ app.get('/orders', async (req, res) => {
     res.status(200).json(JSON.parse(orders));  // Return all orders as JSON
   } catch (error) {
     res.status(500).json({ message: 'Could not retrieve orders.' });
+  }
+});
+
+// Delete all orders
+app.delete('/orders', async (req, res) => {
+  try {
+    await fs.writeFile('./data/orders.json', JSON.stringify([])); // Overwrite with an empty array
+    res.status(200).json({ message: 'All orders deleted.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Could not delete orders.' });
   }
 });
 
