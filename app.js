@@ -67,3 +67,11 @@ app.use((req, res) => {
 });
 
 app.listen(3000);
+app.get('/orders', async (req, res) => {
+  try {
+    const orders = await fs.readFile('./data/orders.json', 'utf8');
+    res.status(200).json(JSON.parse(orders));  // Return all orders as JSON
+  } catch (error) {
+    res.status(500).json({ message: 'Could not retrieve orders.' });
+  }
+});
